@@ -6,7 +6,7 @@
 #    By: flintlouis <flintlouis@student.codam.nl      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/04/01 15:12:25 by flintlouis    #+#    #+#                  #
-#    Updated: 2021/04/08 22:02:29 by flintlouis    ########   odam.nl          #
+#    Updated: 2021/04/20 13:39:03 by flintlouis    ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -259,8 +259,8 @@ def take_out_corner(cube):
 				cube.move(sequence(side, TAKE_OUT_CORNER_COUNTER_CLOCKWISE))
 			else:
 				cube.move(sequence(side, TAKE_OUT_CORNER_CLOCKWISE))
-			return False
-	return True
+			return True
+	return False
 	
 def corner_on_top(cube):
 	for side in range(4):
@@ -270,18 +270,22 @@ def corner_on_top(cube):
 				if (not check_corner(cube[free_side], BTMRGHT)) or not (cube[free_side][BTMRGHT] == free_side):
 					if free_side == side:
 						cube.move(sequence(side, ROTATE_TOP_CORNER))
+						return
 					elif get_opposite(side) == free_side:
 						cube.move(sequence(free_side, "U2 " + ROTATE_TOP_CORNER))
+						return
 					elif get_right(side) == free_side:
 						cube.move(sequence(free_side, "U' " + ROTATE_TOP_CORNER))
+						return
 					else:
 						cube.move(sequence(free_side, "U " + ROTATE_TOP_CORNER))
+						return
 			return
 
 def create_bottom_layer(cube):
 	while (get_state(cube) & BOTTOM_SOLVED) != BOTTOM_SOLVED:
 		fit_corner(cube)
-		if take_out_corner(cube):
+		if not take_out_corner(cube):
 			corner_on_top(cube)
 
 def solve(cube, eval=False):
